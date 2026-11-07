@@ -94,14 +94,16 @@ def main():
     print(f"  -> Saved fitted preprocessor to: {preprocessor_path}")
 
     # 3. Model Definitions
+    # Using class_weight='balanced' where supported to handle the 70:30 class imbalance
+    # and prevent models from defaulting to the majority class (Recall=0).
     models = {
         "logistic_regression": (
             "Logistic Regression",
-            LogisticRegression(max_iter=1000, random_state=42)
+            LogisticRegression(max_iter=1000, class_weight="balanced", random_state=42)
         ),
         "decision_tree": (
             "Decision Tree",
-            DecisionTreeClassifier(max_depth=5, min_samples_split=10, min_samples_leaf=5, random_state=42)
+            DecisionTreeClassifier(max_depth=5, min_samples_split=10, min_samples_leaf=5, class_weight="balanced", random_state=42)
         ),
         "knn": (
             "K-Nearest Neighbors",
@@ -113,7 +115,7 @@ def main():
         ),
         "svm": (
             "Support Vector Machine",
-            SVC(kernel="rbf", C=1.0, probability=True, random_state=42)
+            SVC(kernel="rbf", C=1.0, probability=True, class_weight="balanced", random_state=42)
         )
     }
 
