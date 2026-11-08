@@ -81,12 +81,15 @@ MODEL_OPTIONS = {
 # --- HEADER SECTION ---
 st.markdown('<div class="main-header">🫀 Heart Attack Risk Prediction in India</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="sub-header">BITS Pilani M.Tech (AIML) — Machine Learning Assignment 2 | '
-    'End-to-End Classification & Model Benchmark System</div>',
+    '<div class="sub-header"><strong>Prabjot Singh Bhogal</strong> (BITS ID: <code>2026aj05042</code>) | '
+    'BITS Pilani M.Tech (AIML) — Machine Learning Assignment 2</div>',
     unsafe_allow_html=True
 )
 
 # --- SIDEBAR CONTROLS ---
+st.sidebar.markdown("### 🎓 Student Information")
+st.sidebar.markdown("**Student:** Prabjot Singh Bhogal  \n**BITS ID:** `2026aj05042`  \n**Course:** M.Tech AIML (Machine Learning)")
+st.sidebar.markdown("---")
 st.sidebar.header("⚙️ Configuration & Inputs")
 
 # 1. Model Selection Dropdown (Mandatory 1 mark in rubric)
@@ -236,7 +239,15 @@ if df_test is not None:
                     zero_division=0
                 )
                 df_report = pd.DataFrame(report_dict).T.round(4)
-                st.dataframe(df_report.style.highlight_max(axis=0, color="#d8f3dc"), use_container_width=True)
+                df_report["support"] = df_report["support"].astype(int)
+                
+                # Custom highlight function setting BOTH background AND high-contrast text color
+                def highlight_max_contrast(s):
+                    is_max = s == s.max()
+                    return ["background-color: #2b9348; color: #ffffff; font-weight: bold" if v else "" for v in is_max]
+                
+                styled_report = df_report.style.apply(highlight_max_contrast, subset=["precision", "recall", "f1-score"])
+                st.dataframe(styled_report, use_container_width=True)
                 
                 st.info(
                     f"**Analysis Note:** Evaluated on **{len(y_eval)}** test records. "
